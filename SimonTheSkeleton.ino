@@ -26,8 +26,10 @@ Servo myservo;  // create servo object to control a servo
 PlainFFT FFT = PlainFFT(); /* Create FFT object */
 /* 
  These values can be changed in order to evaluate the functions 
- NOTE: human voice operates in 80Hz - 1kHz range
+ NOTE: human voice operates in 80Hz - 10kHz range
  */
+ 
+ // TODO: up sample rate to match all human voices
 const uint16_t samples = 64;
 double signalFrequency = 1000;
 double samplingFrequency = 5000;
@@ -98,12 +100,13 @@ void loop()
   FFT.ComplexToMagnitude(vReal, vImag, samples); /* Compute magnitudes */
   //PrintVector(vReal, (samples >> 1), SCL_FREQUENCY);      
   //double x = FFT.MajorPeak(vReal, samples, samplingFrequency);
+
+  //TODO: extract power in system...
   double x;
-  //extract power in system...
   
   Serial.println(x, 6);
 
-  //Output to servo
+  //TODO: Output to servo
   myservo.write(x);
   
   //log finished time & sleep for remaining of sampling time
