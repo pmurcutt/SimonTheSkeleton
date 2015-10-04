@@ -83,7 +83,8 @@ void loop()
   waveform[waveformHead] = analogRead(mic_ana_pin); //0-1023
   
   //copy waveform out
-  for (uint8_t i = 0; i < samples; ++i) {
+  for (uint8_t i = 0; i < samples; ++i) 
+  {
     vReal[i] = waveform[ (i + waveformHead) % samples ];
   }
   //update waveformHead for next pass
@@ -102,11 +103,16 @@ void loop()
   //double x = FFT.MajorPeak(vReal, samples, samplingFrequency);
 
   //TODO: extract power in system...
-  double x;
+  double x = 0.0;
+  
+  for (uint8_t i = 0; i < samples; ++i) 
+  {
+    x += vReal[i];
+  }
   
   Serial.println(x, 6);
 
-  //TODO: Output to servo
+  //TODO: Scale output to servo
   myservo.write(x);
   
   //log finished time & sleep for remaining of sampling time
@@ -116,6 +122,11 @@ void loop()
   {
     delay(delayRemaining);
   }
+  else
+  {
+    Serial.print("Delay overran!");
+  }
+  
 }
 
 void PrintVector(double *vData, uint8_t bufferSize, uint8_t scaleType) 
